@@ -27,6 +27,7 @@ The **Oil Dashboard** allows users to explore how changes in the global Brent Cr
     *   [Recharts](https://recharts.org/) for statistical charts.
     *   [react-simple-maps](https://www.react-simple-maps.io/) for geospatial data.
 *   **Icons**: [Lucide React](https://lucide.dev/)
+*   *Deepseek-v4-flash* via Cline
 
 ## ⚙️ Installation & Setup
 
