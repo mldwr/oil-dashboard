@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, Suspense } from 'react';
 /* Remove the focus outline from Recharts components globally */
 const GLOBAL_CHART_STYLES = `
   .recharts-wrapper:focus,
@@ -14,29 +14,31 @@ const GLOBAL_CHART_STYLES = `
   }
 `;
 
-import {
-  BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer,
-  ComposedChart, Line, Area, Dot
-} from 'recharts';
-import { TrendingUp, DollarSign, Info, ArrowRightLeft, Droplets } from 'lucide-react';
-import MethodologySection from './components/MethodologySection';
-import ComputationDetails from './components/ComputationDetails';
-import KeyAnalysisInsights from './components/KeyAnalysisInsights';
-import Disclaimer from './components/Disclaimer';
-import WorldOilMap from './components/WorldOilMap';
 import BumpChart from './components/BumpChart';
-import MarginAnalysisChart from './components/MarginAnalysisChart';
 import ParameterControlPanel from './components/ParameterControlPanel';
-import ProfitSensitivityChart from './components/ProfitSensitivityChart';
 import MarketPriceSlider from './components/MarketPriceSlider';
 import HistoricalPriceSlider from './components/HistoricalPriceSlider';
-import HistoricalChart from './components/HistoricalChart';
 import { OIL_DATA } from './data/oilData';
 import { BASELINE_BRENT, calculateAdjustedPrice, calculateCrudeMetrics } from './utils/pricingModel';
 
-
 import FlagSphere from './components/FlagSphere';
 import GradeBadge from './components/GradeBadge';
+
+// Larger, below-the-fold sections (and their heavy chart libraries) are
+// code-split with React.lazy so they do not ship in the initial payload.
+const ComputationDetails = React.lazy(() => import('./components/ComputationDetails'));
+const HistoricalChart = React.lazy(() => import('./components/HistoricalChart'));
+const ProfitSensitivityChart = React.lazy(() => import('./components/ProfitSensitivityChart'));
+const WorldOilMap = React.lazy(() => import('./components/WorldOilMap'));
+const MarginAnalysisChart = React.lazy(() => import('./components/MarginAnalysisChart'));
+const Disclaimer = React.lazy(() => import('./components/Disclaimer'));
+const KeyAnalysisInsights = React.lazy(() => import('./components/KeyAnalysisInsights'));
+const MethodologySection = React.lazy(() => import('./components/MethodologySection'));
+
+// Keep layout stable while a lazy chunk loads.
+const SECTION_FALLBACK = (
+  <div className="min-h-16 bg-slate-900/40 rounded-lg animate-pulse" aria-hidden="true" />
+);
 
 
 const COUNTRY_FLAGS = {
@@ -437,21 +439,37 @@ const App = () => {
         </div>
       </div>
 
-      <ComputationDetails marketPrice={marketPrice} data={calculatedData} />
+      <Suspense fallback={SECTION_FALLBACK}>
+        <ComputationDetails marketPrice={marketPrice} data={calculatedData} />
+      </Suspense>
 
-      <HistoricalChart countryFlags={COUNTRY_FLAGS} />
+      <Suspense fallback={SECTION_FALLBACK}>
+        <HistoricalChart countryFlags={COUNTRY_FLAGS} />
+      </Suspense>
 
-      <ProfitSensitivityChart oilData={effectiveOilData} countryFlags={COUNTRY_FLAGS} />
+      <Suspense fallback={SECTION_FALLBACK}>
+        <ProfitSensitivityChart oilData={effectiveOilData} countryFlags={COUNTRY_FLAGS} />
+      </Suspense>
 
-      <WorldOilMap calculatedData={calculatedData} countryFlags={COUNTRY_FLAGS} />
+      <Suspense fallback={SECTION_FALLBACK}>
+        <WorldOilMap calculatedData={calculatedData} countryFlags={COUNTRY_FLAGS} />
+      </Suspense>
 
-      <MarginAnalysisChart calculatedData={calculatedData} CustomTooltip={CustomTooltip} />
+      <Suspense fallback={SECTION_FALLBACK}>
+        <MarginAnalysisChart calculatedData={calculatedData} CustomTooltip={CustomTooltip} />
+      </Suspense>
       
-      <Disclaimer />
+      <Suspense fallback={SECTION_FALLBACK}>
+        <Disclaimer />
+      </Suspense>
 
-      <KeyAnalysisInsights calculatedData={calculatedData} marketPrice={marketPrice} />
+      <Suspense fallback={SECTION_FALLBACK}>
+        <KeyAnalysisInsights calculatedData={calculatedData} marketPrice={marketPrice} />
+      </Suspense>
 
-      <MethodologySection marketPrice={marketPrice} />
+      <Suspense fallback={SECTION_FALLBACK}>
+        <MethodologySection marketPrice={marketPrice} />
+      </Suspense>
 
       <footer className="max-w-7xl mx-auto mt-12 pt-6 border-t border-slate-900 text-center text-slate-600 text-[10px] uppercase tracking-[0.2em] font-bold">
         Oil Valuation Dashboard • 2026 Orange Goose Analytics • All rights reserved

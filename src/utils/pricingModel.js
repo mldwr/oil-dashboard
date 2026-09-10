@@ -10,100 +10,21 @@
  * 2. INTERPOLATION: If the Brent price is between known data points, linearly interpolate.
  * 3. EXTRAPOLATION: If the Brent price is outside the historical range, linearly extrapolate
  *    based on the nearest available data trend.
+ *
+ * NOTE: The raw `*_extracted.csv` datasets (~1.4 MB) are NOT bundled here. The
+ * interpolation tables are precomputed at build time by
+ * `scripts/generate-lookup.mjs` into `src/data/generated/lookup.json`.
  */
 
-import brentCsv from "../data/brent_extracted.csv?raw";
-import canadaCsv from "../data/Canada_Western_Canadian_Select_extracted.csv?raw";
-import iranCsv from "../data/Iran_Light_extracted.csv?raw";
-import iraqCsv from "../data/Iraq_Basrah_Medium_extracted.csv?raw";
-import kuwaitCsv from "../data/Kuwait_Export_Blend_extracted.csv?raw";
-import libyaCsv from "../data/Libyia_Es_Sider_extracted.csv?raw";
-import russiaCsv from "../data/russia_urals_extracted.csv?raw";
-import saudiCsv from "../data/Saudi_Arabia_Arab_Light_extracted.csv?raw";
-import uaeCsv from "../data/uae_murban_extracted.csv?raw";
-import usaCsv from "../data/usa_wti_crude_extracted.csv?raw";
-import venezuelaCsv from "../data/Venezuela_Merey_extracted.csv?raw";
+// Precomputed `{ brent, crude }` lookup series per country (see scripts/generate-lookup.mjs).
+import lookupByCountry from "../data/generated/lookup.json";
 
 // constraint_y values represent the actual market prices at $66.24 Brent (January 14th baseline).
 export const BASELINE_BRENT = 66.24;
 
-const CSV_BY_COUNTRY = {
-  "Canada": canadaCsv,
-  "Iran": iranCsv,
-  "Iraq": iraqCsv,
-  "Kuwait": kuwaitCsv,
-  "Libya": libyaCsv,
-  "Russia": russiaCsv,
-  "Saudi Arabia": saudiCsv,
-  "UAE": uaeCsv,
-  "USA": usaCsv,
-  "Venezuela": venezuelaCsv,
-};
-
-const parseCsvRows = (csvText) => {
-  if (!csvText) return [];
-  const lines = csvText.trim().split(/\r?\n/);
-  if (lines.length <= 1) return [];
-  const rows = [];
-  for (let i = 1; i < lines.length; i += 1) {
-    const parts = lines[i].split(",");
-    const yValue = parts[1];
-    const xIso = parts[4];
-    const price = Number(yValue);
-    if (!xIso || !Number.isFinite(price)) continue;
-    rows.push({ date: xIso, price });
-  }
-  return rows;
-};
-
-const buildDatePriceMap = (rows) => {
-  const map = new Map();
-  for (const row of rows) {
-    const entry = map.get(row.date);
-    if (entry) {
-      entry.sum += row.price;
-      entry.count += 1;
-    } else {
-      map.set(row.date, { sum: row.price, count: 1 });
-    }
-  }
-  const averaged = new Map();
-  for (const [date, entry] of map) {
-    averaged.set(date, entry.sum / entry.count);
-  }
-  return averaged;
-};
+const LOOKUP_SERIES_BY_COUNTRY = lookupByCountry;
 
 const roundPrice = (value) => Math.round(value * 100) / 100;
-
-const buildLookupSeries = (brentByDate, crudeCsv) => {
-  const crudeByDate = buildDatePriceMap(parseCsvRows(crudeCsv));
-  const merged = new Map();
-  for (const [date, crudePrice] of crudeByDate) {
-    const brentPrice = brentByDate.get(date);
-    if (!Number.isFinite(brentPrice) || !Number.isFinite(crudePrice)) continue;
-    const brentKey = roundPrice(brentPrice);
-    const entry = merged.get(brentKey);
-    if (entry) {
-      entry.sum += crudePrice;
-      entry.count += 1;
-    } else {
-      merged.set(brentKey, { sum: crudePrice, count: 1 });
-    }
-  }
-  return Array.from(merged, ([brent, entry]) => ({
-    brent,
-    crude: entry.sum / entry.count,
-  })).sort((a, b) => a.brent - b.brent);
-};
-
-const BRENT_BY_DATE = buildDatePriceMap(parseCsvRows(brentCsv));
-const LOOKUP_SERIES_BY_COUNTRY = Object.fromEntries(
-  Object.entries(CSV_BY_COUNTRY).map(([country, csv]) => [
-    country,
-    buildLookupSeries(BRENT_BY_DATE, csv),
-  ])
-);
 
 const findLookupPrice = (country, brentPrice, options = {}) => {
   const series = LOOKUP_SERIES_BY_COUNTRY[country];
