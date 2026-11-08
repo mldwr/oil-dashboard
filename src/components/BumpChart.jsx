@@ -30,7 +30,7 @@ const BumpChart = ({
         </div>
       </div>
 
-      <div className="overflow-x-auto">
+      <div className="overflow-x-auto lg:overflow-visible">
       <div className="relative min-w-[640px] lg:min-w-0">
         <ResponsiveContainer width="100%" height={460}>
           <ComposedChart

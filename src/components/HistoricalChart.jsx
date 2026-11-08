@@ -101,7 +101,7 @@ const HistoricalChart = ({ countryFlags }) => {
           </div>
           <div className="mt-2 text-slate-500">Values are pre-aggregated in the historical dataset and rendered as time series.</div>
         </div>
-        <div className="overflow-x-auto">
+        <div className="overflow-x-auto lg:overflow-visible">
         <div className="min-w-[600px] lg:min-w-0">
           <ResponsiveContainer width="100%" height={360}>
             <LineChart data={data} margin={{ top: 40, right: 30, left: 10, bottom: 30 }}>

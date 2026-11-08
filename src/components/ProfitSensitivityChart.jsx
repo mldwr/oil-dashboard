@@ -107,7 +107,7 @@ const ProfitSensitivityChart = ({ oilData, countryFlags }) => {
           <div className="mt-2 text-slate-500">This chart uses OPEX-only net profit, not gross market value.</div>
         </div>
 
-        <div className="overflow-x-auto mb-8">
+        <div className="overflow-x-auto mb-8 lg:overflow-visible">
         <div className="h-100 w-full min-w-[560px] lg:min-w-0">
           <ResponsiveContainer width="100%" height={420}>
             <LineChart
