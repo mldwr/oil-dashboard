@@ -108,7 +108,7 @@ const ProfitSensitivityChart = ({ oilData, countryFlags }) => {
         </div>
 
         <div className="overflow-x-auto mb-8">
-        <div className="h-100 w-full min-w-[560px]">
+        <div className="h-100 w-full min-w-[560px] lg:min-w-0">
           <ResponsiveContainer width="100%" height={420}>
             <LineChart
               data={chartData}
