@@ -396,7 +396,20 @@ const App = () => {
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 p-4 md:p-8 font-sans">
       <style>{GLOBAL_CHART_STYLES}</style>
-      <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
+      <div className="max-w-7xl mx-auto relative flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
+        <a
+          href="https://orange-goose.com"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="Orange Goose"
+          className="absolute right-0 top-0"
+        >
+          <img
+            src="/orange_goose_logo.png"
+            alt="Orange Goose"
+            className="h-7 sm:h-9 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity"
+          />
+        </a>
         <div>
           <h1 className="text-3xl font-bold bg-linear-to-r from-blue-400 to-emerald-400 bg-clip-text text-transparent">
             Global Oil Reservoir Value Dashboard

@@ -90,18 +90,6 @@ const BumpChart = ({
           </ComposedChart>
         </ResponsiveContainer>
 
-        {/* Watermark - Bottom Left Corner */}
-        <div className="absolute -bottom-4 -left-4 flex flex-col items-center gap-1 opacity-80 pointer-events-none select-none">
-          <img
-            src="/orange_goose_logo.png"
-            alt="Orange Goose Analytics"
-            className="w-20 h-20 object-contain"
-          />
-          <span className="text-xs font-medium text-slate-300 tracking-wide">
-            Orange Goose Analytics
-          </span>
-        </div>
-
         {/* Data Source Attribution - Bottom Right Corner */}
         <div className="absolute -bottom-4 -right-2 opacity-70 pointer-events-none select-none">
           <span className="text-[8px] font-light text-slate-400 tracking-wider uppercase">
