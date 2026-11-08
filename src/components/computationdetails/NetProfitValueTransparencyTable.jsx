@@ -49,7 +49,7 @@ const NetProfitValueTransparencyTable = ({ marketPrice, data }) => {
       </div>
 
       <div className="overflow-x-auto rounded-xl border border-slate-800">
-        <table className="w-full text-left text-[10px]">
+        <table className="w-full min-w-[760px] text-left text-[10px]">
           <thead className="bg-slate-800/50 text-slate-400 uppercase tracking-wider font-bold">
             <tr>
               <th className="px-2 py-3">Country</th>
@@ -97,7 +97,7 @@ const NetProfitValueTransparencyTable = ({ marketPrice, data }) => {
                     ${country.netProfitPerBbl.toFixed(2)}
                   </td>
                   <td className="px-2 py-3">
-                    <span className={`px-2 py-1 rounded-md text-[9px] uppercase tracking-wider font-bold ${
+                    <span className={`px-2 py-1 rounded-md text-[9px] uppercase tracking-wider font-bold whitespace-nowrap ${
                       isManualOverride 
                         ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30'
                         : isHistoricalSnapshot

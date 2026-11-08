@@ -35,7 +35,7 @@ const CostsTransparencyTable = () => {
       </div>
 
       <div className="overflow-x-auto rounded-xl border border-slate-800">
-        <table className="w-full text-left text-[10px]">
+        <table className="w-full min-w-[560px] text-left text-[10px]">
           <thead className="bg-slate-800/50 text-slate-400 uppercase tracking-wider font-bold">
             <tr>
               <th className="px-3 py-3">Country</th>
