@@ -30,7 +30,8 @@ const BumpChart = ({
         </div>
       </div>
 
-      <div className="w-full relative">
+      <div className="overflow-x-auto">
+      <div className="relative min-w-[640px]">
         <ResponsiveContainer width="100%" height={460}>
           <ComposedChart
             data={bumpChartData}
@@ -96,6 +97,7 @@ const BumpChart = ({
             Sources: OPEC, Oilprice.com, Statista
           </span>
         </div>
+      </div>
       </div>
     </div>
   );

@@ -18,7 +18,8 @@ const MarginAnalysisChart = ({ calculatedData, CustomTooltip }) => {
         <h2 className="text-lg font-bold mb-6 flex items-center gap-2">
           <DollarSign className="text-emerald-400" /> Margin Analysis
         </h2>
-        <div className="w-full">
+        <div className="overflow-x-auto">
+        <div className="min-w-[520px]">
           <ResponsiveContainer width="100%" height={300}>
             <BarChart
               data={calculatedData}
@@ -58,6 +59,7 @@ const MarginAnalysisChart = ({ calculatedData, CustomTooltip }) => {
               />
             </BarChart>
           </ResponsiveContainer>
+        </div>
         </div>
       </div>
     </div>
